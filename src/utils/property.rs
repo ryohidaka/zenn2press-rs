@@ -1,7 +1,7 @@
 use args::Args;
 use clap::Parser;
 
-use crate::constants::ARTICLES_DIR;
+use crate::constants::{ARTICLES_DIR, IMAGES_DIR};
 
 mod args;
 
@@ -11,6 +11,8 @@ mod args;
 pub struct Properties {
     pub src_articles_dir: String,
     pub dest_articles_dir: String,
+    pub src_images_dir: String,
+    pub dest_images_dir: String,
 }
 
 /// This function parses the command-line arguments and returns a `Properties` struct
@@ -25,6 +27,7 @@ pub fn get_properties() -> Properties {
 
     // Derive paths for the source articles and images
     let src_articles_dir = format!("{}{}", args.src_dir, ARTICLES_DIR);
+    let src_images_dir = format!("{}{}", args.src_dir, IMAGES_DIR);
 
     // Clone the destination articles directory path
     let dest_articles_dir = args.dest_dir.clone();
@@ -34,10 +37,13 @@ pub fn get_properties() -> Properties {
         "Articles: {:?} => {:?}",
         src_articles_dir, dest_articles_dir
     );
+    println!("Images: {:?} => {:?}", src_images_dir, args.dest_images_dir);
 
     // Return the populated `Properties` struct
     Properties {
         src_articles_dir,
         dest_articles_dir,
+        src_images_dir,
+        dest_images_dir: args.dest_images_dir,
     }
 }

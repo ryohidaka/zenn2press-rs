@@ -14,4 +14,8 @@ pub struct Args {
     /// The VitePress directory path (e.g. docs/entries) where you want to place the markdown for the articles.
     #[arg(short = 'd', long, value_name = "DIR")]
     pub dest_dir: String,
+
+    /// The VitePress directory path (e.g. public) where the image will be placed.
+    #[arg(short = 'm', long, value_name = "DIR")]
+    pub dest_images_dir: String,
 }
