@@ -13,6 +13,8 @@ pub struct Properties {
     pub dest_articles_dir: String,
     pub src_images_dir: String,
     pub dest_images_dir: String,
+    pub include: Option<Vec<String>>,
+    pub exclude: Option<Vec<String>>,
 }
 
 /// This function parses the command-line arguments and returns a `Properties` struct
@@ -38,6 +40,8 @@ pub fn get_properties() -> Properties {
         src_articles_dir, dest_articles_dir
     );
     println!("Images: {:?} => {:?}", src_images_dir, args.dest_images_dir);
+    println!("Include Files: {:?}", args.include);
+    println!("Exclude Files: {:?}", args.exclude);
 
     // Return the populated `Properties` struct
     Properties {
@@ -45,5 +49,7 @@ pub fn get_properties() -> Properties {
         dest_articles_dir,
         src_images_dir,
         dest_images_dir: args.dest_images_dir,
+        include: Some(args.include),
+        exclude: Some(args.exclude),
     }
 }

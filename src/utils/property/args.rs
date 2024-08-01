@@ -18,4 +18,12 @@ pub struct Args {
     /// The VitePress directory path (e.g. public) where the image will be placed.
     #[arg(short = 'm', long, value_name = "DIR")]
     pub dest_images_dir: String,
+
+    /// File names to include.
+    #[arg(short, long, value_name = "<FILE>", value_delimiter = ',')]
+    pub include: Vec<String>,
+
+    /// File names to exclude.
+    #[arg(short, long, value_name = "<FILE>", value_delimiter = ',')]
+    pub exclude: Vec<String>,
 }
