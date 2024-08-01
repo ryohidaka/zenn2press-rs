@@ -35,3 +35,32 @@ pub fn get_file_paths<'a>(dir_path: &'a str) -> BoxFuture<'a, io::Result<Vec<Pat
         Ok(entries)
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs::{self, File};
+
+    #[tokio::test]
+    async fn test_get_file_paths() {
+        let temp_dir = tempfile::tempdir().unwrap();
+        let temp_dir_path = temp_dir.path();
+
+        // Create test files and directories
+        let sub_dir = temp_dir_path.join("subdir");
+        fs::create_dir(&sub_dir).unwrap();
+
+        let file1 = temp_dir_path.join("file1.jpg");
+        let file2 = sub_dir.join("file2.png");
+
+        File::create(&file1).unwrap();
+        File::create(&file2).unwrap();
+
+        let file_paths = get_file_paths(temp_dir_path.to_str().unwrap())
+            .await
+            .unwrap();
+        assert_eq!(file_paths.len(), 2);
+        assert!(file_paths.contains(&file1));
+        assert!(file_paths.contains(&file2));
+    }
+}
