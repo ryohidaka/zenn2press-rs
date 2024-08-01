@@ -9,8 +9,8 @@ mod args;
 /// derived from the command-line arguments.
 #[derive(Debug)]
 pub struct Properties {
-    src_articles_dir: String,
-    dest_articles_dir: String,
+    pub src_articles_dir: String,
+    pub dest_articles_dir: String,
 }
 
 /// This function parses the command-line arguments and returns a `Properties` struct
