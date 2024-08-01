@@ -3,6 +3,7 @@ use std::{fs, path::PathBuf};
 use copy::copy_markdown_file;
 
 pub mod copy;
+pub mod frontmatter;
 
 /// This function copies Markdown files from the source directory to the destination directory.
 ///

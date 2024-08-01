@@ -1,3 +1,5 @@
+use super::frontmatter::parse_frontmatter;
+
 use std::{fs, path::Path};
 
 /// Copies a Markdown file to a destination directory, optionally updating its frontmatter.
@@ -21,8 +23,27 @@ pub fn copy_markdown_file(dest_dir: &str, file: &Path) -> Result<(), Box<dyn std
     // Read the content of the file
     let file_content = fs::read_to_string(&file)?;
 
+    // Parse the frontmatter of the file
+    let (content, data) = parse_frontmatter(&file_content)?;
+
+    // Check if the file has a title in its frontmatter
+    if !data.contains_key("title") {
+        println!("No title found in the frontmatter of {:?}", file);
+        return Ok(());
+    }
+
+    // Convert the title to a string
+    let title = data["title"].as_str().unwrap_or("Untitled");
+
+    // Update the content of the file by adding the title at the beginning
+    let updated_content = format!("# {}\n{}", title, content);
+
     // Stringify the updated content and the frontmatter data
-    let new_file_content = format!("n{}", file_content);
+    let new_file_content = format!(
+        "---\n{}---\n{}",
+        serde_yaml::to_string(&data)?,
+        updated_content
+    );
 
     // Construct the full path of the file in the destination directory
     let output_file_path = Path::new(dest_dir).join(file.file_name().unwrap());
@@ -48,7 +69,12 @@ mod tests {
         let mut temp_file = fs::File::create(&temp_file_path).unwrap();
 
         // Sample content with frontmatter
-        let content = r#"This is a test markdown file."#;
+        let content = r#"---
+title: "Test Title"
+description: "Test Description"
+---
+This is a test markdown file.
+"#;
 
         temp_file.write_all(content.as_bytes()).unwrap();
 
@@ -67,6 +93,7 @@ mod tests {
 
         // Verify the content of the copied file
         let copied_content = fs::read_to_string(copied_file_path).unwrap();
+        assert!(copied_content.contains("# Test Title"));
         assert!(copied_content.contains("This is a test markdown file."));
     }
 }
