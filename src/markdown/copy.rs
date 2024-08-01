@@ -32,3 +32,41 @@ pub fn copy_markdown_file(dest_dir: &str, file: &Path) -> Result<(), Box<dyn std
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+    use std::io::Write;
+    use tempfile::tempdir;
+
+    #[test]
+    fn test_copy_markdown_file() {
+        // Set up a temporary directory and file for testing
+        let temp_dir = tempdir().unwrap();
+        let temp_file_path = temp_dir.path().join("test.md");
+        let mut temp_file = fs::File::create(&temp_file_path).unwrap();
+
+        // Sample content with frontmatter
+        let content = r#"This is a test markdown file."#;
+
+        temp_file.write_all(content.as_bytes()).unwrap();
+
+        // Define the destination directory
+        let dest_dir = tempdir().unwrap();
+
+        // Call the function to copy the markdown file
+        let result = copy_markdown_file(dest_dir.path().to_str().unwrap(), &temp_file_path);
+
+        // Check if the operation was successful
+        assert!(result.is_ok());
+
+        // Check if the file was created in the destination directory
+        let copied_file_path = dest_dir.path().join("test.md");
+        assert!(copied_file_path.exists());
+
+        // Verify the content of the copied file
+        let copied_content = fs::read_to_string(copied_file_path).unwrap();
+        assert!(copied_content.contains("This is a test markdown file."));
+    }
+}
