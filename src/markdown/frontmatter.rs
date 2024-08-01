@@ -45,3 +45,34 @@ pub fn parse_frontmatter(
     // Return the content and the parsed frontmatter as a tuple
     Ok((content.to_string(), data))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_frontmatter_with_valid_input() {
+        let input = "---\ntitle: Example\n---\nThis is the content.";
+        let (content, config) = parse_frontmatter(input).unwrap();
+
+        assert_eq!(content, "This is the content.");
+        assert_eq!(config.get("title").unwrap(), "Example");
+    }
+
+    #[test]
+    fn test_parse_frontmatter_with_empty_frontmatter() {
+        let input = "---\n---\nThis is the content.";
+        let (content, config) = parse_frontmatter(input).unwrap();
+
+        assert_eq!(content, "This is the content.");
+        assert!(config.is_empty());
+    }
+
+    #[test]
+    fn test_parse_frontmatter_with_invalid_yaml() {
+        let input = "---\ntitle: [Invalid YAML\n---\nThis is the content.";
+        let result = parse_frontmatter(input);
+
+        assert!(result.is_err());
+    }
+}
