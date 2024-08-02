@@ -4,6 +4,8 @@ use config::read_config_file;
 use copy::copy_markdown_file;
 use filter::filter_markdown_files;
 
+use crate::progress_bar::get_pb;
+
 pub mod config;
 pub mod copy;
 pub mod filter;
@@ -43,9 +45,6 @@ pub fn copy_markdown_files(
     include: Option<Vec<&str>>,
     exclude: Option<Vec<&str>>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    println!("Copy Markdown:");
-    println!("Starting to copy Markdown files...");
-
     // Read all files in the source directory
     let files: Vec<PathBuf> = fs::read_dir(src_dir)?
         .filter_map(Result::ok)
@@ -62,11 +61,18 @@ pub fn copy_markdown_files(
         None
     };
 
+    let file_length = markdown_files.len().try_into().unwrap();
+    let pb = get_pb(file_length);
+
     for file in markdown_files {
+        let filename = file.file_name().unwrap().to_string_lossy().to_string();
+        pb.set_message(filename);
+
         // Copy each Markdown file from the source directory to the dest directory.
         copy_markdown_file(dest_dir, &file, frontmatter_config.as_ref())?;
+        pb.inc(1)
     }
+    pb.finish_with_message("Completed.");
 
-    println!("Copying of Markdown files is complete.");
     Ok(())
 }

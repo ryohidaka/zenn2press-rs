@@ -2,6 +2,8 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
+use crate::progress_bar::get_pb;
+
 /// Copies files to a target directory.
 ///
 /// This function iterates over a list of file paths, determines their relative paths
@@ -18,9 +20,14 @@ use std::path::{Path, PathBuf};
 ///
 /// * `io::Result<()>` - Returns `Ok(())` on success or an `io::Error` on failure.
 pub fn copy_files(file_paths: &[PathBuf], src_dir: &str, dest_dir: &str) -> io::Result<()> {
-    println!("Copying files...");
+    let file_length = file_paths.len().try_into().unwrap();
+
+    let pb = get_pb(file_length);
 
     for file in file_paths {
+        let filename = file.file_name().unwrap().to_string_lossy().to_string();
+        pb.set_message(filename);
+
         // Determine the file's relative path from the source directory
         let relative_path = file.strip_prefix(src_dir).unwrap();
         let target_path = Path::new(dest_dir).join(relative_path);
@@ -32,9 +39,11 @@ pub fn copy_files(file_paths: &[PathBuf], src_dir: &str, dest_dir: &str) -> io::
 
         // Copy the file to the destination
         fs::copy(file, target_path)?;
+
+        pb.inc(1)
     }
 
-    println!("Copying of files is complete.");
+    pb.finish_with_message("Completed.");
     Ok(())
 }
 
