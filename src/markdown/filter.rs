@@ -119,4 +119,31 @@ mod tests {
         let result = filter_markdown_files(files, include, exclude);
         assert_eq!(result, vec![PathBuf::from("file1.md")]);
     }
+
+    #[test]
+    fn test_add_md_ext() {
+        // Test case: file names without extension
+        let paths = vec!["file1", "file2", "file3"];
+        let result = add_md_ext(paths);
+        assert_eq!(
+            result,
+            vec![
+                "file1.md".to_string(),
+                "file2.md".to_string(),
+                "file3.md".to_string()
+            ]
+        );
+
+        // Test case: file names with and without extension
+        let paths = vec!["file1.md", "file2", "file3.md"];
+        let result = add_md_ext(paths);
+        assert_eq!(
+            result,
+            vec![
+                "file1.md".to_string(),
+                "file2.md".to_string(),
+                "file3.md".to_string()
+            ]
+        );
+    }
 }
