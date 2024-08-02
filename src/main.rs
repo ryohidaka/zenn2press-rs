@@ -24,6 +24,7 @@ async fn main() {
     copy_markdown_files(
         properties.src_articles_dir.as_str(),
         properties.dest_articles_dir.as_str(),
+        properties.config_file.as_deref(),
         include.clone(),
         exclude.clone(),
     )

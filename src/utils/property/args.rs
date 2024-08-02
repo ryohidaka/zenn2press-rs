@@ -19,6 +19,10 @@ pub struct Args {
     #[arg(short = 'm', long, value_name = "DIR")]
     pub dest_images_dir: String,
 
+    /// Configuration File Path.
+    #[arg(short, long, value_name = "FILE")]
+    pub config_file: Option<String>,
+
     /// File names to include.
     #[arg(short, long, value_name = "<FILE>", value_delimiter = ',')]
     pub include: Vec<String>,

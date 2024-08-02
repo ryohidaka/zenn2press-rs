@@ -15,6 +15,7 @@ pub struct Properties {
     pub dest_images_dir: String,
     pub include: Option<Vec<String>>,
     pub exclude: Option<Vec<String>>,
+    pub config_file: Option<String>,
 }
 
 /// This function parses the command-line arguments and returns a `Properties` struct
@@ -35,6 +36,7 @@ pub fn get_properties() -> Properties {
     let dest_articles_dir = args.dest_dir.clone();
 
     // Print configuration details for debugging
+    println!("Configuration File: {:?}", args.config_file.as_deref());
     println!(
         "Articles: {:?} => {:?}",
         src_articles_dir, dest_articles_dir
@@ -45,6 +47,7 @@ pub fn get_properties() -> Properties {
 
     // Return the populated `Properties` struct
     Properties {
+        config_file: args.config_file,
         src_articles_dir,
         dest_articles_dir,
         src_images_dir,

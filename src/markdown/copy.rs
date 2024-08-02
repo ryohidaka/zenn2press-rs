@@ -1,4 +1,4 @@
-use super::frontmatter::parse_frontmatter;
+use super::{config::ConfigFile, frontmatter::parse_frontmatter};
 
 use std::{fs, path::Path};
 
@@ -19,21 +19,31 @@ use std::{fs, path::Path};
 /// # Returns
 ///
 /// * `Result<(), Box<dyn std::error::Error>>` - Returns `Ok(())` on success, or an error wrapped in `Box` on failure.
-pub fn copy_markdown_file(dest_dir: &str, file: &Path) -> Result<(), Box<dyn std::error::Error>> {
+pub fn copy_markdown_file(
+    dest_dir: &str,
+    file: &Path,
+    frontmatter_config: Option<&ConfigFile>,
+) -> Result<(), Box<dyn std::error::Error>> {
     // Read the content of the file
     let file_content = fs::read_to_string(&file)?;
 
     // Parse the frontmatter of the file
     let (content, data) = parse_frontmatter(&file_content)?;
 
+    // Merge frontmatter data with the provided config, if any
+    let mut merged_data = data;
+    if let Some(config) = frontmatter_config {
+        merged_data.extend(config.other.clone());
+    }
+
     // Check if the file has a title in its frontmatter
-    if !data.contains_key("title") {
+    if !merged_data.contains_key("title") {
         println!("No title found in the frontmatter of {:?}", file);
         return Ok(());
     }
 
     // Convert the title to a string
-    let title = data["title"].as_str().unwrap_or("Untitled");
+    let title = merged_data["title"].as_str().unwrap_or("Untitled");
 
     // Update the content of the file by adding the title at the beginning
     let updated_content = format!("# {}\n{}", title, content);
@@ -41,7 +51,7 @@ pub fn copy_markdown_file(dest_dir: &str, file: &Path) -> Result<(), Box<dyn std
     // Stringify the updated content and the frontmatter data
     let new_file_content = format!(
         "---\n{}---\n{}",
-        serde_yaml::to_string(&data)?,
+        serde_yaml::to_string(&merged_data)?,
         updated_content
     );
 
@@ -82,7 +92,7 @@ This is a test markdown file.
         let dest_dir = tempdir().unwrap();
 
         // Call the function to copy the markdown file
-        let result = copy_markdown_file(dest_dir.path().to_str().unwrap(), &temp_file_path);
+        let result = copy_markdown_file(dest_dir.path().to_str().unwrap(), &temp_file_path, None);
 
         // Check if the operation was successful
         assert!(result.is_ok());

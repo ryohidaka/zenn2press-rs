@@ -1,0 +1,13 @@
+{
+  "frontmatter": {
+    "aside": true,
+    "editLink": true,
+    "footer": true,
+    "lastUpdated": true,
+    "layout": "doc",
+    "navbar": true,
+    "outline": [1, 2, 3],
+    "sidebar": true,
+    "titleTemplate": ":title - Custom Suffix"
+  }
+}
