@@ -72,3 +72,51 @@ fn add_md_ext(paths: Vec<&str>) -> Vec<String> {
         })
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_filter_markdown_files() {
+        let files = vec![
+            PathBuf::from("file1.md"),
+            PathBuf::from("file2.txt"),
+            PathBuf::from("file3.md"),
+            PathBuf::from("file4.md"),
+        ];
+
+        // Test case: no include or exclude filters
+        let result = filter_markdown_files(files.clone(), None, None);
+        assert_eq!(
+            result,
+            vec![
+                PathBuf::from("file1.md"),
+                PathBuf::from("file3.md"),
+                PathBuf::from("file4.md")
+            ]
+        );
+
+        // Test case: include filter
+        let include = Some(vec!["file1", "file3"]);
+        let result = filter_markdown_files(files.clone(), include, None);
+        assert_eq!(
+            result,
+            vec![PathBuf::from("file1.md"), PathBuf::from("file3.md")]
+        );
+
+        // Test case: exclude filter
+        let exclude = Some(vec!["file3"]);
+        let result = filter_markdown_files(files.clone(), None, exclude);
+        assert_eq!(
+            result,
+            vec![PathBuf::from("file1.md"), PathBuf::from("file4.md")]
+        );
+
+        // Test case: both include and exclude filters
+        let include = Some(vec!["file1", "file4"]);
+        let exclude = Some(vec!["file4"]);
+        let result = filter_markdown_files(files, include, exclude);
+        assert_eq!(result, vec![PathBuf::from("file1.md")]);
+    }
+}
