@@ -34,3 +34,33 @@ pub fn read_config_file(config_file: &str) -> Result<ConfigFile, Box<dyn Error>>
     // Return the parsed ConfigFile struct
     Ok(config)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// This test case verifies that the `read_config_file` function
+    /// correctly reads and parses a YAML configuration file.
+    #[test]
+    fn test_read_config_file() {
+        // Create a sample YAML content
+        let yaml_content = r#"
+        key1: value1
+        key2: value2
+        "#;
+
+        // Write the sample YAML content to a temporary file
+        let temp_file_path = "test_config.yaml";
+        fs::write(temp_file_path, yaml_content).expect("Unable to write test file");
+
+        // Read and parse the configuration file
+        let config = read_config_file(temp_file_path).expect("Failed to read config file");
+
+        // Check if the parsed values match the expected values
+        assert_eq!(config.other.get("key1").unwrap(), "value1");
+        assert_eq!(config.other.get("key2").unwrap(), "value2");
+
+        // Clean up the temporary file
+        fs::remove_file(temp_file_path).expect("Unable to delete test file");
+    }
+}
