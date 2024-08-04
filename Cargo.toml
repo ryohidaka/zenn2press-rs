@@ -1,7 +1,15 @@
 [package]
 name = "zenn2press"
 version = "0.1.0"
+authors = ["ryohidaka <39184410+ryohidaka@users.noreply.github.com>"]
 edition = "2021"
+
+description = "A Rust library to convert Zenn contents to VitePress"
+repository = "https://github.com/ryohidaka/zenn2press-rs"
+readme = "README.md"
+keywords = ["zenn", "VitePress", "markdown"]
+categories = ["command-line-utilities"]
+license = "MIT"
 
 [dependencies]
 clap = { version = "4.5.11", features = ["derive"] }
