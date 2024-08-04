@@ -1,5 +1,6 @@
 # zenn2press
 
+[![Test Suite](https://github.com/ryohidaka/zenn2press-rs/actions/workflows/test.yml/badge.svg)](https://github.com/ryohidaka/zenn2press-rs/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 `zenn2press` is a Rust library to convert Zenn contents to VitePress.
