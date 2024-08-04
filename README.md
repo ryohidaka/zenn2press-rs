@@ -83,6 +83,26 @@ async fn main() {
 }
 ```
 
+### Config file (`Optional`)
+
+**zenn2press-config.json**
+
+```json
+{
+  "frontmatter": {
+    "aside": true,
+    "editLink": true,
+    "footer": true,
+    "lastUpdated": true,
+    "layout": "doc",
+    "navbar": true,
+    "outline": [1, 2, 3],
+    "sidebar": true,
+    "titleTemplate": ":title - Custom Suffix"
+  }
+}
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
