@@ -2,7 +2,8 @@ use std::time::Instant;
 
 use colored::Colorize;
 use indicatif::HumanDuration;
-use utils::property::get_properties;
+
+use utils::{figlet::print_figlet, property::get_properties};
 use zenn2press::{image::copy_images, markdown::copy_markdown_files};
 
 mod constants;
@@ -12,6 +13,9 @@ mod utils;
 async fn main() {
     // Record the start time of the process
     let started = Instant::now();
+
+    // Print Figlet text
+    print_figlet();
 
     // Fetch properties from the configuration
     let properties = get_properties();
