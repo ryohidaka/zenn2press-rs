@@ -41,6 +41,17 @@ zenn2press \
     -i sample-article-1
 ```
 
+#### Parameters
+
+| Argument          | Short | Long                | Value Name | Description                                                                                               |
+| ----------------- | ----- | ------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
+| `src_dir`         | `-s`  | `--src-dir`         | `DIR`      | Path of the root directory of Zenn content.                                                               |
+| `dest_dir`        | `-d`  | `--dest-dir`        | `DIR`      | The VitePress directory path (e.g. `docs/entries`) where you want to place the markdown for the articles. |
+| `dest_images_dir` | `-m`  | `--dest-images-dir` | `DIR`      | The VitePress directory path (e.g. `public`) where the image will be placed.                              |
+| `config_file`     | `-c`  | `--config-file`     | `FILE`     | Configuration file path.                                                                                  |
+| `include`         | `-i`  | `--include`         | `<FILE>`   | File names to include, separated by commas.                                                               |
+| `exclude`         | `-e`  | `--exclude`         | `<FILE>`   | File names to exclude, separated by commas.                                                               |
+
 ### Package
 
 Here is an example of how to use zenn2press in your project:
