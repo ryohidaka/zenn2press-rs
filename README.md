@@ -1,5 +1,6 @@
 # zenn2press
 
+![Crates.io Version](https://img.shields.io/crates/v/zenn2press)
 [![Test Suite](https://github.com/ryohidaka/zenn2press-rs/actions/workflows/test.yml/badge.svg)](https://github.com/ryohidaka/zenn2press-rs/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
